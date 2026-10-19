@@ -1,0 +1,47 @@
+# Models — transferred via USB, never committed
+models/
+
+# Audio files — training data, test WAVs
+*.wav
+*.raw
+*.flac
+*.mp3
+
+# Sockets and runtime
+*.sock
+/run/at/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs
+*.log
+logs/
+
+# Config with secrets (none expected, but defensive)
+config/*.local.toml
+config/*.secret.toml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db

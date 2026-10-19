@@ -1,0 +1,43 @@
+at/
+├── README.md
+├── progress.md                  # NEW — updated after every edit
+├── LICENSE
+├── .gitignore
+├── specs/
+│   ├── 00-vision.md
+│   ├── 01-voice-loop.md
+│   ├── 02-ipc.md
+│   ├── 03-config.md
+│   ├── 04-audio-source.md
+│   ├── 05-wake-word.md
+│   ├── 06-vad.md
+│   ├── 07-stt.md
+│   ├── 08-llm.md
+│   ├── 09-tts.md
+│   └── 10-loop.md
+├── src/
+│   ├── at_ipc/
+│   ├── at_config/
+│   ├── audio_source/
+│   ├── wake_word/
+│   ├── vad/
+│   ├── stt/
+│   ├── llm/
+│   ├── tts/
+│   └── loop/
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── acceptance/
+├── config/
+│   ├── at.toml
+│   └── modules.toml
+├── personalities/
+│   └── personality.md
+├── models/
+├── docs/
+│   ├── decisions.md
+│   └── architecture.md
+└── scripts/
+    ├── record-training.sh
+    └── deploy.sh
