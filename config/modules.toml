@@ -1,0 +1,94 @@
+# Per-module settings for the AT Assistant
+
+[wake_word]
+threshold = 0.5
+model_path = "/opt/at/models/wake-word/at.onnx"
+cooldown = 0.4
+
+[vad]
+sensitivity = 0.5
+silence_ms = 750
+min_speech_ms = 250
+
+[stt]
+model_path = "/opt/at/models/stt/base.en.bin"
+threads = 3
+beam = 1
+language = "en"
+
+[llm]
+model_path = "/opt/at/models/llm/qwen2.5-3b-instruct-q4_k_m.gguf"
+threads = 6
+context_window = 16384
+
+[llm.sampling]
+temperature = 0.7
+top_p = 0.9
+top_k = 40
+repetition_penalty = 1.1
+
+[llm.budgets]
+max_tokens = 150
+max_tokens_elaboration = 400
+
+[tts]
+voice_path = "/opt/at/models/tts/en_GB-alan-medium.onnx"
+length_scale = 1.1
+fade_ms = 100
+playback_command = "paplay"
+
+[loop]
+cooldown = 400
+empty_response_lines = [
+    "I didn't catch that, sir.",
+    "Say again, sir.",
+    "Nothing came through, sir.",
+    "No audio, sir."
+]
+
+[[loop.acknowledgment_lines]]
+line = "Sir?"
+weight = 0.30
+
+[[loop.acknowledgment_lines]]
+line = "Yes, sir."
+weight = 0.10
+
+[[loop.acknowledgment_lines]]
+line = "Listening, sir."
+weight = 0.10
+
+[[loop.acknowledgment_lines]]
+line = "Go ahead, sir."
+weight = 0.10
+
+[[loop.acknowledgment_lines]]
+line = "At your service, sir."
+weight = 0.10
+
+[[loop.acknowledgment_lines]]
+line = "Ready, sir."
+weight = 0.10
+
+[[loop.acknowledgment_lines]]
+line = "Sir."
+weight = 0.10
+
+[[loop.acknowledgment_lines]]
+line = "On your command, sir."
+weight = 0.05
+
+[loop.boot_greetings]
+morning = "Good morning, sir."
+afternoon = "Good afternoon, sir."
+evening = "Good evening, sir."
+unclean_shutdown = "I'm here, sir."
+cold_boot = "All systems nominal, sir."
+
+[ipc]
+wake_word = "wakeword.sock"
+vad = "vad.sock"
+stt = "stt.sock"
+llm = "llm.sock"
+tts = "tts.sock"
+loop = "loop.sock"

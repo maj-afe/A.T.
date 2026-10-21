@@ -30,10 +30,10 @@ Live status. Update after every significant edit. This is how future-you (and ag
 - [x] Architecture overview
 
 ### Phase 1 — Foundation (IN PROGRESS)
-- [ ] at-ipc implemented
-- [ ] at-ipc tested
-- [ ] at-config implemented
-- [ ] at-config tested
+- [x] at-ipc implemented
+- [x] at-ipc tested
+- [x] at-config implemented
+- [x] at-config tested
 
 ### Phase 2 — Audio Input
 - [ ] audio-source implemented
@@ -70,10 +70,9 @@ Live status. Update after every significant edit. This is how future-you (and ag
 - [ ] Personality polish
 
 ---
-
 ## Current Blockers
 
-None.
+- Antigravity Gemini 3.8 Flash quota: exhausted, resets ~2026-10-27. Using Deepseek Harness as primary implementer until then. Gemini 3.1 Pro / Sonnet 4.6 website still available for reviews.
 
 ---
 
