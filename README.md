@@ -73,3 +73,25 @@ See `docs/decisions.md` for full rationale.
 ## Non-Negotiables
 
 Air-gapped. Local-only. Private. No cloud. No telemetry. No auto-updates. No external logging.
+
+# Wake Word Training Data
+
+**Collected:** 2026-10-23
+**Target:** 200-500 positives, 100+ negatives
+**Current:** 108 positives, 66 negatives
+
+## Provenance
+- Laptop ALC256 mic: 78 positives, 66 negatives
+- Samsung phone mic: 30+ positives
+
+## Conditions covered
+- Distance: [1ft, 3ft, 6ft, 10ft — check which you actually recorded]
+- Tone: [normal, quiet, tired, hurried — check]
+- Background: [silence, fan, music, TV — check]
+
+## Gaps
+- [Whatever you didn't cover — e.g., "no recordings with music background"]
+
+## Processed directory
+16kHz mono 16-bit WAV, converted with sox.
+

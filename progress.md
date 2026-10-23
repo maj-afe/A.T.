@@ -29,13 +29,14 @@ Live status. Update after every significant edit. This is how future-you (and ag
 - [x] Decision log
 - [x] Architecture overview
 
-### Phase 1 — Foundation (IN PROGRESS)
+### Phase 1 — Foundation (DONE)
 - [x] at-ipc implemented
-- [x] at-ipc tested
+- [x] at-ipc tested (61/61 passing, 5 consecutive stable runs)
+- [x] at-ipc adversarial coverage (6 new tests added after Gemini 3.8 Flash found 4 bugs)
 - [x] at-config implemented
-- [x] at-config tested
+- [x] at-config tested (9/9 passing)
 
-### Phase 2 — Audio Input
+### Phase 2 — Audio Input (NEXT)
 - [ ] audio-source implemented
 - [ ] audio-source tested with WAV capture
 

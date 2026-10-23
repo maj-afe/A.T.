@@ -109,3 +109,51 @@ Format: **Date — Decision.** Rationale. Alternatives considered.
 **2026-XX-XX — `at-ipc` implementer: claude-opus4.6(thinking).** Concurrency-sensitive, foundational, small surface. Small models miss edge cases. Reviewer: gemini3.8-flash(effort=max).
 
 **2026-XX-XX — Personality prompt stays local.** Sensitive content. Edit `personalities/personality.md` on the Dell or offline. Do not paste into cloud agents.
+
+**2026-10-21 — at-ipc bug fixes and adversarial test coverage.**
+
+Gemini 3.8 Flash (Antigravity, High effort) ran adversarial probes against
+at-ipc and found 4 bugs:
+1. drop_on_backpressure=True buffered frames before timeout, so frames were
+   delivered not dropped. Fixed by checking is_congested() before write.
+2. Disconnect callback fired twice on eviction. Fixed by removing the call
+   from broadcast; _handle_client.finally is single source of truth.
+3. BrokenPipeError from wait_closed() on dead socket. Fixed with try/except
+   in wait_closed AND mapping transport OSError in read_message to
+   IPCDisconnectError (extra root cause Gemini and Deepseek both found).
+4. Silent clients appeared as peer_name="unknown" on disconnect. Fixed by
+   IPCClient.connect() sending a hello event, consumed by _handle_client.
+
+Sonnet 4.6 test-quality audit had predicted GAPs 2, 3, 5, 6, 7 — all four
+of Gemini's findings fell within those predictions. This validates the
+multi-model review pipeline: frontier test-quality review flags where bugs
+are likely; adversarial probes then discover the specific bugs.
+
+Deepseek V4.1 Flash (High effort) applied fixes and wrote 6 adversarial
+tests. Deepseek also independently confirmed tests 2 and 3 fail against
+pre-fix code (revert-test-revert methodology), proving the tests are
+genuinely adversarial rather than confirmatory.
+
+is_congested() does NOT check the write lock — lock is for atomicity,
+congestion is only buffer backpressure. Clarified after Deepseek flagged
+in its "least confident" section.
+
+Final state: 61/61 tests passing, stable across 5 consecutive runs.
+
+
+
+**2026-10-22 — Correction: audio-source was tested against real hardware.**
+
+Deepseek's implementation report incorrectly stated the dev machine has no
+physical soundcard and that `default` resolves to a virtual capture device.
+Verification with `arecord -l` shows a real ALC256 Analog capture device
+(card 0: PCH, HDA Intel PCH). Tests therefore exercised real ADC samples,
+not a virtual device.
+
+Implication: audio-source framing, subprocess lifecycle, and IPC broadcast
+are proven against real hardware. The remaining uncertainty is acoustic
+capture (does the mic pick up speech, or just room tone) — verify with
+`arecord -d 3 /tmp/mic_test.wav && aplay /tmp/mic_test.wav` before Phase 8.
+
+The 128ms buffering measurement and 66-67 frame count concern stand — they
+were measured on real hardware, so they reflect real behavior.
