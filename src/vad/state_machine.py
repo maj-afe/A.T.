@@ -4,7 +4,7 @@ Two-state VAD state machine: SILENT and SPEAKING.
 Consumes 960-byte (30 ms) PCM frames, scores each with a Silero VAD scorer, and
 emits ``speech_started`` / ``speech_ended`` / ``speech_rejected`` events. One
 utterance is buffered in memory (never on disk) and capped at 60 s
-(1920 frames, per spec/loop force-end rule).
+(2000 frames, per spec/loop force-end rule).
 """
 
 from collections.abc import AsyncIterable, AsyncIterator, Iterable
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 FRAME_BYTES = 960
 FRAME_MS = 30
-MAX_UTTERANCE_FRAMES = 1920
+MAX_UTTERANCE_FRAMES = 2000  # 60 s at 30 ms per frame
 
 SILENT = "SILENT"
 SPEAKING = "SPEAKING"

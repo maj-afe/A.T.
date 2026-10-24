@@ -39,7 +39,7 @@ Defaults match `config/modules.toml` `[vad]`:
   - `< 250 ms` of voiced audio → `speech_rejected` (buffer discarded, no audio emitted)
   - otherwise → `speech_ended` with the full utterance buffer
 - Pauses shorter than 750 ms (e.g. 500 ms) do **not** split an utterance.
-- The buffer is capped at 1920 frames (the spec's 60 s force-end rule). Reaching the cap force-emits `speech_ended` and resets, so runaway speech can never grow the buffer unbounded.
+- The buffer is capped at 2000 frames (60 s at 30 ms per frame, the spec's force-end rule). Reaching the cap force-emits `speech_ended` and resets, so runaway speech can never grow the buffer unbounded.
 
 ## Events
 

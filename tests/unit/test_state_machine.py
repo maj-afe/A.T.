@@ -130,7 +130,7 @@ async def test_d_800ms_pause_splits_into_two_utterances():
 async def test_e_buffer_cap_forces_end_of_runaway_speech():
     # Catches: buffer growing unbounded on runaway speech
     machine = VADStateMachine(ContentScorer())
-    frames = _run("v", 2000)
+    frames = _run("v", 2001)
 
     events = await _collect(machine, frames)
 
@@ -140,11 +140,11 @@ async def test_e_buffer_cap_forces_end_of_runaway_speech():
         SPEECH_STARTED,
     ]
     forced_end = events[1]
-    assert forced_end.frame_index == 1919  # cap reached on the 1920th frame
-    assert forced_end.duration_ms == 1920 * 30
-    assert len(forced_end.audio) == 1920 * FRAME_BYTES
-    assert events[2].frame_index == 1920  # speech resumes after the forced end
-    assert machine.buffered_frames == 2000 - 1920
+    assert forced_end.frame_index == 1999  # cap reached on the 2000th frame
+    assert forced_end.duration_ms == 2000 * 30  # 60 s
+    assert len(forced_end.audio) == 2000 * FRAME_BYTES
+    assert events[2].frame_index == 2000  # speech resumes after the forced end
+    assert machine.buffered_frames == 1
 
 
 @pytest.mark.asyncio
