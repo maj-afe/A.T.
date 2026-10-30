@@ -157,3 +157,19 @@ capture (does the mic pick up speech, or just room tone) — verify with
 
 The 128ms buffering measurement and 66-67 frame count concern stand — they
 were measured on real hardware, so they reflect real behavior.
+
+
+
+**2026-10-24 — VAD chunking: 30ms frames with 512-sample rolling window.**
+
+Silero VAD is trained on 512-sample (32ms) chunks. AT's audio pipeline
+produces 960-byte (480-sample, 30ms) frames. The detector maintains a
+rolling 512-sample buffer and scores every 30ms step (32-sample overlap).
+
+This is a deliberate adaptation, not Silero's canonical chunking. It works
+for AT (unit tests pass, real model inference passes on synthetic WAVs) but
+real-speech sensitivity may differ slightly from upstream.
+
+Verify on real audio before Phase 8. If detection quality is poor, the fix
+is either (a) reframe audio to 512-sample chunks in audio-source, or (b)
+adjust Silero's threshold to compensate.

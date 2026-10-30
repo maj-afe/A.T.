@@ -1,4 +1,5 @@
 # Models — transferred via USB, never committed
+tmp/
 models/
 
 # Audio files — training data, test WAVs

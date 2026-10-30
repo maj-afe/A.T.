@@ -11,8 +11,8 @@ silence_ms = 750
 min_speech_ms = 250
 
 [stt]
-model_path = "/opt/at/models/stt/base.en.bin"
-threads = 3
+model_path = "/home/aniruddh_sen/Documents/Kate/at/models/stt/ggml-base.en-q5_1.bin"
+threads = 4
 beam = 1
 language = "en"
 
