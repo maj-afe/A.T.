@@ -173,3 +173,23 @@ real-speech sensitivity may differ slightly from upstream.
 Verify on real audio before Phase 8. If detection quality is poor, the fix
 is either (a) reframe audio to 512-sample chunks in audio-source, or (b)
 adjust Silero's threshold to compensate.
+
+**2026-10-30 — STT module complete.**
+
+Modules built: transcriber (PCM→WAV wrap, subprocess whisper-cli, timing
+parse), main (IPC service on stt.sock). Model = ggml-base.en-q5_1.bin.
+Flags = -t 4 -bs 1 -nt -l en. Timeout = 15s.
+
+Testing: 13 adversarial tests covering WAV validity, text parse, timing
+parse, timeout, nonzero exit, missing model, temp cleanup, empty text,
+IPC handler, empty flag, real-model hello world, silence, malformed input.
+
+Three test-bugs found and fixed during implementation (missing IPCClient
+arg, wrong method name, startup race) — none indicated code bugs.
+
+Latency: dev machine ~4.5s for 3s audio (RTF 1.2). Dell projection
+~2.0-2.5s. Loop turn will be ~6-7s end-of-speech to first audio.
+
+Deferred to Phase 8:
+- Long-utterance timing verification (30-60s inputs)
+- Dell hardware benchmarking

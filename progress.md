@@ -47,12 +47,12 @@ Live status. Update after every significant edit. This is how future-you (and ag
 - [ ] wake-word service implemented
 - [ ] wake-word tested in-room
 
-### Phase 4 — Speech In
-- [ ] vad implemented and tested
-- [ ] stt implemented and tested
+### Phase 4 — Speech In (DONE)
+- [x] vad core implemented and tested (74/74, real Silero verified)
+- [x] stt module implemented and tested (87/87, real whisper-cli verified)
 
-### Phase 5 — Speech Out
-- [ ] tts implemented and tested
+### Phase 5 — Speech Out (IN PROGRESS)
+- [ ] tts core implemented and tested
 
 ### Phase 6 — Brain
 - [ ] personality.md drafted
