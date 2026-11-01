@@ -33,7 +33,9 @@ max_tokens_elaboration = 400
 
 [tts]
 voice_path = "/opt/at/models/tts/en_GB-alan-medium.onnx"
-length_scale = 1.1
+length_scale = 0.95
+noise_scale = 0.7
+noise_w = 1.2
 fade_ms = 100
 playback_command = "paplay"
 
