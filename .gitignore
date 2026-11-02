@@ -46,3 +46,5 @@ data/
 # OS
 .DS_Store
 Thumbs.db
+*.kate-swp
+.*.kate-swp
