@@ -12,13 +12,13 @@ min_speech_ms = 250
 
 [stt]
 model_path = "/home/aniruddh_sen/Documents/Kate/at/models/stt/ggml-base.en-q5_1.bin"
-threads = 4
+threads = 2
 beam = 1
 language = "en"
 
 [llm]
 model_path = "/opt/at/models/llm/qwen2.5-3b-instruct-q4_k_m.gguf"
-threads = 6
+threads = 2
 context_window = 16384
 
 [llm.sampling]

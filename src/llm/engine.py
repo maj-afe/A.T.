@@ -69,15 +69,7 @@ class LLMEngine:
                 n_threads=self.n_threads,
                 verbose=self.verbose,
             )
-            logger.info("Model loaded. Running warmup inference...")
-            # Warmup inference to prime KV cache
-            warmup_chunks = list(
-                self.generate(
-                    messages=[{"role": "user", "content": "warmup"}],
-                    max_tokens=1,
-                )
-            )
-            logger.info("Warmup complete (%d chunks yielded)", len(warmup_chunks))
+            logger.info("Model loaded. Warmup deferred to LLMService with personality prompt.")
         except LLMError:
             raise
         except Exception as exc:
@@ -144,7 +136,6 @@ class LLMEngine:
             choices = chunk.get("choices", [])
             if not choices:
                 continue
-
             choice = choices[0]
             if choice.get("finish_reason") is not None:
                 finish_reason = choice["finish_reason"]

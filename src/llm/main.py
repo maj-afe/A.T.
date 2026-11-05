@@ -135,12 +135,27 @@ class LLMService:
                 repeat_penalty=repeat_penalty,
             )
 
-        logger.info("Initializing PromptBuilder with %s...", self.personality_path)
+            logger.info("Initializing PromptBuilder with %s...", self.personality_path)
         self.prompt_builder = PromptBuilder(
             personality_path=self.personality_path,
             engine=self.engine,
             max_context_tokens=13000,
         )
+
+        # Warmup with the actual personality prompt to prime the KV cache.
+        # Without this, the first real generation must process the full
+        # ~2000-token personality prompt from cold, taking 60-90s on CPU.
+        logger.info("Running warmup with actual personality prompt...")
+        try:
+            warmup_messages = [
+                {"role": "system", "content": self.prompt_builder.system_prompt},
+                {"role": "user", "content": "warmup"},
+            ]
+            for _ in self.engine.generate(warmup_messages, max_tokens=1):
+                pass
+            logger.info("Warmup complete — personality prompt cached in KV")
+        except Exception as exc:
+            logger.warning("Warmup failed (non-fatal): %s", exc)
 
         logger.info("Initializing PostProcessor...")
         self.post_processor = PostProcessor()
@@ -192,14 +207,62 @@ class LLMService:
         )
         logger.info("LLM service started and ready")
 
-    async def stop(self) -> None:
-        """Stop LLM service cleanly."""
-        if not self._running:
+    # async def stop(self) -> None:
+    #     """Stop LLM service cleanly."""
+    #     if not self._running:
+    #         return
+    #
+    #     logger.info("Stopping LLM service...")
+    #     self._running = False
+    #     self._remove_signals()
+
+    """ Chnging async function
+    """
+
+    # async def stop(self, force: bool = False) -> None:
+    #     """Stop the LLM service. force=True skips the grace period for active generation."""
+    #     self._running = False
+    #
+    #     if not force and self._active_generation:
+    #         logger.info("Waiting for active generation to finish (30s grace)...")
+    #     try:
+    #         await asyncio.wait_for(self._active_generation_done.wait(), timeout=30.0)
+    #     except asyncio.TimeoutError:
+    #         logger.warning("Active generation did not finish before shutdown")
+    #         # Force abort
+    #         if self._abort_flag is not None:
+    #             self._abort_flag.set()
+    #
+    #  ... rest of existing stop() body unchanged ...
+
+    # new async function.
+
+    async def stop(self, force: bool = False) -> None:
+        """Stop the LLM service. force=True skips the grace period for active generation."""
+        if not self._running and not force:
             return
 
-        logger.info("Stopping LLM service...")
+        logger.info("Stopping LLM service (force=%s)...", force)
         self._running = False
+
+        # Wait for active generation unless force
+        if not force and self._active_generation:
+            logger.info(
+                "Waiting up to %.1fs for active generation to complete...",
+                SHUTDOWN_GRACE_PERIOD_SECONDS,
+            )
+            try:
+                await asyncio.wait_for(
+                    self._active_generation_done.wait(),
+                    timeout=SHUTDOWN_GRACE_PERIOD_SECONDS,
+                )
+            except asyncio.TimeoutError:
+                logger.warning("Active generation did not finish before shutdown")
+
         self._remove_signals()
+        await self.ipc_server.stop()
+        self.session_reader.close()
+        logger.info("LLM service stopped cleanly")
 
         # Wait for active generation up to grace period
         if self._active_generation:

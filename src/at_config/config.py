@@ -82,9 +82,11 @@ class Config:
         "tts": {
             "voice_path": str,
             "length_scale": float,
+            "noise_scale": float,
+            "noise_w": float,
             "fade_ms": int,
             "playback_command": str,
-        },
+            },
         "loop": {
             "cooldown": int,
             "acknowledgment_lines": list,
